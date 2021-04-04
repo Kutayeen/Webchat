@@ -1,0 +1,73 @@
+﻿@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+<div class="container">
+    <div class="row">
+        <div class="col-sm">
+            <h1 class="pb-2 ">Users</h1>
+        </div>
+        <div class="col-sm">
+
+        </div>
+        <div class="col-sm">
+
+        </div>
+        <div class="col-sm" style="margin-top: 20px;">
+            <input type="button" value="Create New User" class="btn btn-primary" onclick="location.href='/Admin/CreateUser'" />
+
+        </div>
+    </div>
+</div>
+<div class="row g-5 py-5">
+
+    @foreach (var item in ViewData["Users"] as IEnumerable<Webchat.Model.User>)
+    {
+        <div class="row g-5 py-5" style="margin-top: -40px !important;">
+            <div class="card" style="width: 18rem;margin: 20px;">
+                <div class="card-body">
+                    <h5 class="card-title">@item.UserName</h5>
+                    <p class="card-text">@item.UserMail</p>
+                    <button id="bt-@item.UserMail" type="button" class="btn btn-outline-success pull-right" onclick="edit('@item.UserId');">Edit User</button>
+                    <button id="bt-@item.UserMail" type="button" class="btn btn-outline-danger pull-right" onclick="DeleteUser('@item.UserId');">Delete User</button>
+                </div>
+            </div>
+        </div>
+    }
+
+</div>
+
+<script>
+
+    function DeleteUser(user) {
+        $.ajax({
+            type: 'POST',
+            url: '/Admin/Delete',
+            data: { 'UserId': user },
+            datatype: "json",
+            traditional: true,
+            success: function () {
+                window.location.pathname = '/Admin'
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert("jqXHR:" + jqXHR.status + " errorThrown: " + errorThrown);
+            }
+        });
+    }
+
+    function edit(userId) {
+        $.ajax({
+            type: 'POST',
+            url: '/Admin/Userdetail/' + userId,
+            data: { 'userId': userId },
+            datatype: "json",
+            traditional: true,
+            success: function () {
+                window.location.pathname = '/Admin/Userdetail/' + userId
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert("jqXHR:" + jqXHR.status + " errorThrown: " + errorThrown);
+            }
+        });
+    }
+
+</script>

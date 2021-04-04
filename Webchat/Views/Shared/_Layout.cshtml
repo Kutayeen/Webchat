@@ -1,0 +1,58 @@
+﻿@using Microsoft.AspNetCore.Http;
+<!DOCTYPE html>
+<html lang="en" @{ if (@ViewData["Title"].Equals("Home Page") || @ViewData["Title"].Equals("User Detail") || @ViewData["Title"].Equals("Chat Room")) { @Html.Raw(" style=\"overflow: hidden;\"") ; } }>
+<head>
+    
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Webchat</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+
+
+<div class="d-flex flex-column min-vh-100" style="height:400px;">
+    <body>
+        <header style="background-color: white;">
+            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+                <div class="container">
+                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Webchat</a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    @{
+                        if (@Context.Session.GetString("IsAdmin") != null && @Context.Session.GetString("IsAdmin").Equals("true"))
+                        {
+                            <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                                <ul class="navbar-nav flex-grow-1">
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Index">Admin</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        }
+                    }                  
+                </div>
+            </nav>
+        </header>
+        <div class="container">
+            <main role="main" class="flex-fill">
+                @RenderBody()
+            </main>
+        </div>
+
+        <footer class="border-top  text-muted fixed-bottom" style="height: 60px; background-color: white;">
+            <div class="container text-center" style="margin-top: 25px;">
+                &copy; 2021 - Webchat - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            </div>
+        </footer>
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+        @RenderSection("Scripts", required: false)
+    </body>
+</div>
+
+</html>

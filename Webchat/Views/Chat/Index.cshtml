@@ -1,0 +1,96 @@
+﻿@{
+    ViewData["Title"] = "Chat Room";
+}
+
+<div class="chat_window">
+    <div class="top_menu">
+        <div class="buttons"><div class="button close"></div><div class="button minimize"></div><div class="button maximize"></div></div>
+        <div class="title">@ViewData["ChatName"]</div>
+    </div>
+    <ul class="messages">
+        @{int i = 0;
+            @foreach (var item in ViewData["Messages"] as Dictionary<Webchat.Model.Message, string>)
+            {
+
+                @if (@item.Key.Sender == Int32.Parse(@ViewData["UserId"].ToString()))
+                {
+                    <li class="message appeared right">
+                        <div id="side" class="d-flex justify-content-between ">
+                            <div class="h3" value="User" id="User"></div><div class="text_wrapper"><div class="text">@item.Key.Content</div></div>
+                        </div>
+                    </li>
+
+                }
+                else
+                {
+                    <li class="message appeared left">
+
+                        <div id="side" class="d-flex justify-content-between ">
+                            <div class="h3" value="User" id="User"> @item.Value</div><div class="text_wrapper"><div class="text">@item.Key.Content</div></div>
+                        </div>
+
+                    </li>
+
+                }
+                i++;
+               
+            }
+        }
+    </ul>
+    <div class="bottom_wrapper clearfix">
+        <div class="message_input_wrapper"><input type="text" id="messageInput" class="message_input" placeholder="Type your message here..." /></div>
+        <button type="button" id="sendButton" class="send_message">Send</button>
+    </div>
+</div>
+
+<div class="message_template">
+    <li class="message">
+        <div class="d-flex justify-content-between">
+            <div class="h3" value="User"></div><div class="text_wrapper"><div class="text"></div></div>
+        </div>
+    </li>
+</div>
+
+<script src="~/js/signalr/dist/browser/signalr.js"></script>
+<script>
+
+
+    "use strict";
+
+    var connection = new signalR.HubConnectionBuilder().withUrl("/SignalrHub").build();
+
+    //Disable send button until connection is established
+    document.getElementById("sendButton").disabled = true;
+
+    connection.on("ReceiveMessage", function (user, userId, chatId, message) {
+        if (chatId === "@ViewData["ChatId"].ToString()") {
+            var msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            var encodedMsg = msg;
+            var $li = $($('.message_template').clone().html());
+            $li.addClass(userId === "@ViewData["UserId"].ToString()" ? 'right' : 'left').find('.text').html(encodedMsg);
+            $li.find('.h3').html(userId === "@ViewData["UserId"].ToString()" ? '' : user);
+            $('.messages').append($li);
+            document.getElementById("messageInput").value = null;
+            $li.addClass('appeared')
+            $('.messages').animate({ scrollTop: $('.messages').prop('scrollHeight') }, 300);
+        }
+    });
+
+    connection.start().then(function () {
+        document.getElementById("sendButton").disabled = false;
+    }).catch(function (err) {
+        console.error(err.toString());
+    });
+
+    document.getElementById("sendButton").addEventListener("click", function (event) {
+        var user = "@ViewData["UserName"].ToString()";
+        var message = document.getElementById("messageInput").value;
+        if (message !== '' && message) {
+                    connection.invoke("SendMessage", user, "@ViewData["UserId"].ToString()", "@ViewData["ChatId"].ToString()" , message).catch(function (err) {
+                console.error(err.toString());
+            });
+        }
+        event.preventDefault();
+    }); 
+
+</script>

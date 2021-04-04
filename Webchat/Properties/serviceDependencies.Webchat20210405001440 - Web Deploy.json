@@ -1,0 +1,16 @@
+{
+  "dependencies": {
+    "mssql1": {
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourcegroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/webchatdbserver/databases/Webchat_db",
+      "type": "mssql.azure",
+      "connectionId": "DESKTOP-FVAKF1L\\MSSQLSERVER01",
+      "secretStore": "AzureAppSettings"
+    },
+    "signalr1": {
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourcegroups/[parameters('resourceGroupName')]/providers/Microsoft.SignalRService/SignalR/Webchatservice",
+      "type": "signalr.azure",
+      "connectionId": "Azure__SignalR__ConnectionString",
+      "secretStore": "AzureAppSettings"
+    }
+  }
+}

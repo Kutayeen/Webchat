@@ -1,0 +1,7 @@
+﻿@model string[]
+
+@{       if (Model != null)
+            {
+                <div class="alert @Model[0]">@Model[1]</div>
+            }
+}

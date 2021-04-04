@@ -1,0 +1,63 @@
+﻿@{
+    ViewData["Title"] = "CreateChat";
+}
+
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<div class="row g-5 py-5">
+
+    @foreach (var item in ViewData["Users"] as IEnumerable<Webchat.Model.User>)
+    {
+        <div class="row g-5 py-5" style="margin-top: -40px !important;">
+            <div class="card" style="width: 18rem;margin: 20px;">
+                <div class="card-body">
+                    <h5 class="card-title">@item.UserName</h5>
+                    <p class="card-text">@item.UserMail</p>
+                    <button id="bt-@item.UserMail" type="button" class="btn btn-success pull-right" onclick="addUser('@item.UserMail');">Add to Chat</button>
+                </div>
+            </div>
+        </div>
+    }
+
+</div>
+
+<div class="d-grid gap-2 col-6 mx-auto">
+    <div class="text-center">
+        <button id="create" type="button" class="btn btn-success btn-lg" onclick="createfunction();">Create Chat</button>
+    </div>
+</div>
+<script>
+    var users = [];
+    function addUser(user) {
+        if (users.includes(user)) {
+            users.pop(user);
+            document.getElementById("bt-" + user).innerHTML = "Add to Chat";
+            document.getElementById("bt-" + user).className = "btn btn-success pull-right";
+        } else {
+            users.push(user);
+            document.getElementById("bt-" + user).innerHTML = "Remove from Chat";
+            document.getElementById("bt-" + user).className = "btn btn-danger pull-right";
+        }
+    }
+    function createfunction() {
+        $.ajax({
+            type: 'POST',
+            url: '/Dashboard/Done',
+            data: { 'users': users },
+            datatype: "json",
+            traditional: true,
+            success: function () {
+                if (users.length == 0) {
+                    alert("Please add at least one person to chat!");
+                } else {
+                    window.location.pathname = '/Home'
+                }                
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert("jqXHR:" + jqXHR.status + " errorThrown: " + errorThrown);
+            }
+        });
+    }
+
+    
+
+</script>

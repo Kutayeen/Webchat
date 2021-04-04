@@ -1,0 +1,78 @@
+﻿@using Microsoft.AspNetCore.Http;
+@{
+ViewData["Title"] = "Dashboard";
+}
+<div class="container">
+    <div class="row">
+        <div class="col-sm">
+            <h1 class="pb-2 ">@Context.Session.GetString("UserName")'s Chats</h1>
+        </div>
+        <div class="col-sm">
+
+        </div>
+        <div class="col-sm">
+
+        </div>
+        <div class="col-sm" style="margin-top: 20px;">
+            <input type="button" value="Create New Chat" class="btn btn-primary" onclick="location.href='/Dashboard/CreateChat'" />
+
+        </div>
+    </div>
+</div>
+<div class="row g-5 py-5">
+    @{  if (ViewData["Chats"] != null) {
+        @foreach (var item in ViewData["Chats"] as IEnumerable<Webchat.Model.Chat>)
+        {
+            <div class="row g-5 py-5" style="margin-top: -40px !important;">
+                <div class="card" style="width: 18rem;margin: 20px;">
+                    <div class="card-body">
+                        <h5 class="card-title">@item.ChatName</h5>
+                        <p class="card-text">@item.ChatCreated</p>
+                        <button id="bt-@item.ChatId" type="button" class="btn btn-success pull-right" onclick="chatfunction('@item.ChatId');">Chat</button>
+                        <button id="bt-@item.ChatId" type="button" class="btn btn-danger pull-left" onclick="deletefunction('@item.ChatId');">Delete Chat</button>
+                    </div>
+                </div>
+            </div>
+            }
+
+        }
+    }
+
+    <script>
+
+        function deletefunction(chatId) {
+            $.ajax({
+                type: 'POST',
+                url: '/Dashboard/DeleteChat',
+                data: { 'chatId': chatId },
+                datatype: "json",
+                traditional: true,
+                success: function () {
+                    location.reload();
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert("jqXHR:" + jqXHR.status + " errorThrown: " + errorThrown);
+                }
+            });
+        }
+
+        function chatfunction(chatId) {
+            $.ajax({
+                type: 'POST',
+                url: '/Chat/GoChat/' + chatId,
+                data: { 'chatId': chatId },
+                datatype: "json",
+                traditional: true,
+                success: function () {
+                    window.location.pathname = '/Chat/Index/' + chatId
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert("jqXHR:" + jqXHR.status + " errorThrown: " + errorThrown);
+                }
+            });
+        }
+
+    </script>
+
+</div>
+ 

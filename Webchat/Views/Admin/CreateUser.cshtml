@@ -1,0 +1,44 @@
+﻿@{
+    ViewData["Title"] = "User Create";
+}
+
+<div class="container">
+    <main role="main" class="flex-fill">
+
+        <div class="container rounded bg-white mt-5 mb-5">
+            <div class="row">
+                <div class="col-md-3 border-right">
+
+                </div>
+                <div class="col-md-5 border-right">
+                    <div class="p-3 py-5">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h4 class="text-right">Create New User</h4>
+                        </div>
+                        <div class="row mt-2">
+                        </div>
+                        <div class="row mt-3">
+                            <form id="register-form" method="post" action="/Admin/Create" role="form">
+                                <div class="col-md-12"><label class="labels">User Name</label><input type="text" name="UserName" class="form-control" placeholder="User Name" value=""></div>
+                                <div class="col-md-12"style="margin-top: 10px;"><label class="labels">Email Address</label><input type="text" name="UserMail" class="form-control" placeholder="Email" value=""></div>
+                                <div class="col-md-12"style="margin-top: 10px;">
+                                    <label class="labels">Password</label><input type="password" name="UserPassword" id="password" tabindex="2" class="form-control" placeholder="Password">
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-check form-switch" style="margin-top: 10px;">
+                                        <label class="form-check-label" for="flexSwitchCheckDefault">Admin</label>
+                                        <input class="form-check-input" name="IsAdmin" value="true" type="checkbox" id="flexSwitchCheckDefault">
+                                    </div>
+                                </div>
+                                
+                                <div class="mt-5 text-center"><button class="btn btn-primary profile-button" type="submit" type="button">Save Profile</button></div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
